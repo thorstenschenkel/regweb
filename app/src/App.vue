@@ -1,17 +1,21 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <h1>{{ title }}</h1>
+    <event-pciker></event-pciker>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import EventPicker from './components/EventPicker.vue';
 
 export default {
-  name: 'app',
   components: {
-    HelloWorld
+    'event-pciker': EventPicker
+  },
+  data() {
+    return {
+      title: 'VORANMELDUGEN'
+    }
   }
 }
 </script>
