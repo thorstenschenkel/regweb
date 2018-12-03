@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div v-show="isLoading">
+      <font-awesome-icon icon="spinner" spin/>
+    </div>
     <h1>{{ title }}</h1>
     <event-pciker></event-pciker>
   </div>
@@ -16,12 +19,14 @@ export default {
   },
   data() {
     return {
-      title: "VORANMELDUGEN"
+      title: "VORANMELDUGEN",
+      isLoading: false
     };
   },
   created() {
     EventBus.$on(Event.LOADING, data => {
       console.log("loading: ", data);
+      this.isLoading = data;
     });
   }
 };
