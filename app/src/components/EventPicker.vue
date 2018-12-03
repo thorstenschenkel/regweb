@@ -11,6 +11,7 @@
 
 <script>
 import { EventBus } from "./../shared/eventBus";
+import { Event } from "./../shared/eventEnum";
 
 export default {
   data() {
@@ -20,7 +21,7 @@ export default {
     };
   },
   created() {
-    EventBus.$emit("loading", true);
+    EventBus.$emit(Event.LOADING, true);
     // const url =
     //   "https://bl78p0futl.execute-api.eu-west-1.amazonaws.com/public/regapi";
     const url = "http://jsonplaceholder.typicode.com/posts";
@@ -33,7 +34,7 @@ export default {
         console.error("Cannot load the years!", error);
       })
       .finally(() => {
-        EventBus.$emit("loading", false);
+        EventBus.$emit(Event.LOADING, false);
       });
   }
 };

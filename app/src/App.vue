@@ -8,6 +8,7 @@
 <script>
 import EventPicker from "./components/EventPicker.vue";
 import { EventBus } from "./shared/eventBus";
+import { Event } from "./shared/eventEnum";
 
 export default {
   components: {
@@ -19,8 +20,8 @@ export default {
     };
   },
   created() {
-    EventBus.$on("loading", data => {
-      console.log("loading: " + data);
+    EventBus.$on(Event.LOADING, data => {
+      console.log("loading: ", data);
     });
   }
 };
