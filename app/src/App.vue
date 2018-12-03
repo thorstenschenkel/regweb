@@ -6,23 +6,29 @@
 </template>
 
 <script>
-import EventPicker from './components/EventPicker.vue';
+import EventPicker from "./components/EventPicker.vue";
+import { EventBus } from "./shared/eventBus";
 
 export default {
   components: {
-    'event-pciker': EventPicker
+    "event-pciker": EventPicker
   },
   data() {
     return {
-      title: 'VORANMELDUGEN'
-    }
+      title: "VORANMELDUGEN"
+    };
+  },
+  created() {
+    EventBus.$on("loading", data => {
+      console.log("loading: " + data);
+    });
   }
-}
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
