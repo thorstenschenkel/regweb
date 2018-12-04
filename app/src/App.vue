@@ -1,25 +1,27 @@
 <template>
   <div>
     <div v-show="isLoading">
-      <font-awesome-icon icon="spinner" spin/>
+      <spinner></spinner>
     </div>
     <h1>{{ title }}</h1>
-    <event-pciker></event-pciker>
+    <event-picker></event-picker>
   </div>
 </template>
 
 <script>
 import EventPicker from "./components/EventPicker.vue";
+import Spinner from "./components/Spinner.vue";
 import { EventBus } from "./shared/eventBus";
 import { Event } from "./shared/eventEnum";
 
 export default {
   components: {
-    "event-pciker": EventPicker
+    "event-picker": EventPicker,
+    "spinner": Spinner
   },
   data() {
     return {
-      title: "VORANMELDUGEN",
+      title: "VORANMELDUNGEN",
       isLoading: false
     };
   },
@@ -27,6 +29,7 @@ export default {
     EventBus.$on(Event.LOADING, data => {
       console.log("loading: ", data);
       this.isLoading = data;
+      // this.isLoading = true;
     });
   }
 };
