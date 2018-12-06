@@ -3,8 +3,10 @@
     <div v-show="isLoading">
       <spinner></spinner>
     </div>
-    <h1>{{ title }}</h1>
-    <event-picker></event-picker>
+    <div class="container">
+      <h1>{{ title }}</h1>
+      <event-picker></event-picker>
+    </div>
   </div>
 </template>
 
@@ -36,6 +38,7 @@ export default {
 </script>
 
 <style>
+@import "./../node_modules/bootstrap/dist/css/bootstrap.min.css";
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
