@@ -1,3 +1,16 @@
+// data
+// - title
+// Event
+// - listen to event: v-on:changeEvent
+// Bootstrap
+// - import
+// EventBus
+// - $on
+// Components
+// - spinner / Spinner
+// - event-picker / EventPicker
+// - charts / Charts
+
 <template>
   <div>
     <div v-show="isLoading">
@@ -5,13 +18,15 @@
     </div>
     <div class="container">
       <h1>{{ title }}</h1>
-      <event-picker></event-picker>
+      <event-picker v-on:changeEvent="updateSelectedEvent($event)"></event-picker>
+      <charts v-bind:event="selectedEvent"></charts>
     </div>
   </div>
 </template>
 
 <script>
 import EventPicker from "./components/EventPicker.vue";
+import Charts from "./components/Charts.vue";
 import Spinner from "./components/Spinner.vue";
 import { EventBus } from "./shared/eventBus";
 import { Event } from "./shared/eventEnum";
@@ -19,12 +34,14 @@ import { Event } from "./shared/eventEnum";
 export default {
   components: {
     "event-picker": EventPicker,
-    "spinner": Spinner
+    charts: Charts,
+    spinner: Spinner
   },
   data() {
     return {
       title: "VORANMELDUNGEN",
-      isLoading: false
+      isLoading: false,
+      selectedEvent: null
     };
   },
   created() {
@@ -33,6 +50,11 @@ export default {
       this.isLoading = data;
       // this.isLoading = true;
     });
+  },
+  methods: {
+    updateSelectedEvent(newEvent) {
+      this.selectedEvent = newEvent;
+    }
   }
 };
 </script>

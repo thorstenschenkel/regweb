@@ -1,3 +1,6 @@
+// Styles
+// - scoped
+
 <template>
   <div class="spinner-container">
     <div class="center">

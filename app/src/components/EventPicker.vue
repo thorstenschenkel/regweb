@@ -5,8 +5,10 @@
 // - v-on:change
 // vue
 // - created()
-// - http
+// - http.get
 // EventBus
+// - $emit
+// Fire Event
 // - $emit
 
 <template>
@@ -18,11 +20,16 @@
         </div>
         <div class="row">
           <div class="col-12">
-          <select class="form-control" id="yearSelect" v-model="selectedYear" v-on:change="onYearChanged">
-            <option disabled v-bind:value="null">Select a year</option>
-            <option v-for="year in years" v-bind:key="year">{{ year }}</option>
-          </select>
-        </div>
+            <select
+              class="form-control"
+              id="yearSelect"
+              v-model="selectedYear"
+              v-on:change="onYearChanged"
+            >
+              <option disabled v-bind:value="null">Select a year</option>
+              <option v-for="year in years" v-bind:key="year">{{ year }}</option>
+            </select>
+          </div>
         </div>
       </div>
       <div class="col-lg-6 col-md-7 col-sm-8 col-12 form-group" v-if="selectedYear">
@@ -31,10 +38,19 @@
         </div>
         <div class="row">
           <div class="col-12">
-          <select class="form-control" id="eventSelect" v-model="selectedEvent">
-            <option disabled v-bind:value="null">Select an event</option>
-            <option v-for="event in events" v-bind:value="event.id" v-bind:key="event.id">{{ event.name }}</option>
-          </select>
+            <select
+              class="form-control"
+              id="eventSelect"
+              v-model="selectedEvent"
+              v-on:change="onEventChanged"
+            >
+              <option disabled v-bind:value="null">Select an event</option>
+              <option
+                v-for="event in events"
+                v-bind:value="event"
+                v-bind:key="event.id"
+              >{{ event.name }}</option>
+            </select>
           </div>
         </div>
       </div>
@@ -57,8 +73,6 @@ export default {
     };
   },
   created() {
-    this.that = this;
-    EventBus.$emit(Event.LOADING, true);
     // const url =
     //    "https://4gzrl5wmb0.execute-api.eu-west-1.amazonaws.com/public/events";
     const url = "https://jsonplaceholder.typicode.com/todos/1";
@@ -75,11 +89,19 @@ export default {
       });
   },
   methods: {
-    onYearChanged: () => {
+    resetEvent() {
+      this.selectedEvent = null;
+      this.fireEvent();
+    },
+    fireEvent() {
+      this.$emit("changeEvent", this.selectedEvent);
+    },
+    onYearChanged() {
       EventBus.$emit(Event.LOADING, true);
-      const url =
-        "https://bl78p0futl.execute-api.eu-west-1.amazonaws.com/public/regapi";
-      // const url = "http://jsonplaceholder.typicode.com/posts";
+      this.resetEvent();
+      // const url =
+      //  "https://bl78p0futl.execute-api.eu-west-1.amazonaws.com/public/regapi";
+      const url = "http://jsonplaceholder.typicode.com/posts";
       Vue.http
         .get(url)
         .then(data => {
@@ -91,6 +113,9 @@ export default {
         .finally(() => {
           EventBus.$emit(Event.LOADING, false);
         });
+    },
+    onEventChanged() {
+      this.fireEvent();
     }
   }
 };
