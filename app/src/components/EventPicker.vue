@@ -62,24 +62,31 @@
 import Vue from "vue";
 import { EventBus } from "./../shared/eventBus";
 import { Event } from "./../shared/eventEnum";
+import { Constants } from "./../shared/constants";
 
 export default {
   data() {
     return {
-      years: ["2018", "2019"],
+      years: [],
       events: [{ id: 1, name: "abc" }, { id: 2, name: "xyz" }],
       selectedYear: null,
       selectedEvent: null
     };
   },
   created() {
-    // const url =
-    //    "https://4gzrl5wmb0.execute-api.eu-west-1.amazonaws.com/public/events";
-    const url = "https://jsonplaceholder.typicode.com/todos/1";
+    const url = Constants.REGAPI_BASE_URL;
+    // "https://aik0gtj01g.execute-api.eu-west-1.amazonaws.com/public/events";
+    // const url = "https://jsonplaceholder.typicode.com/todos/1";
     Vue.http
       .get(url)
       .then(data => {
-        console.log("data: ", data);
+        if (data && data.body && data.body.body) {
+          const respBody = JSON.parse(data.body.body);
+          console.log("respBody: ", respBody);
+          if (respBody.years) {
+            this.years = respBody.years;
+          }
+        }
       })
       .catch(error => {
         console.error("Cannot load the years!", error);
@@ -99,9 +106,8 @@ export default {
     onYearChanged() {
       EventBus.$emit(Event.LOADING, true);
       this.resetEvent();
-      // const url =
-      //  "https://bl78p0futl.execute-api.eu-west-1.amazonaws.com/public/regapi";
-      const url = "http://jsonplaceholder.typicode.com/posts";
+      const url = Constants.REGAPI_BASE_URL + "?year=" + this.selectedYear;
+      // const url = "http://jsonplaceholder.typicode.com/posts";
       Vue.http
         .get(url)
         .then(data => {
