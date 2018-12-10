@@ -1,8 +1,12 @@
+// Event
+// - listen to event: v-on:changeEvent
 // Styles
 // - scoped
+// v-show
+// created
 
 <template>
-  <div class="spinner-container">
+  <div v-show="isLoading" class="spinner-container">
     <div class="center">
       <font-awesome-icon class="spinner" icon="spinner" spin/>
     </div>
@@ -10,6 +14,23 @@
 </template>
 
 <script>
+import { EventBus } from "./../shared/eventBus";
+import { Event } from "./../shared/eventEnum";
+
+export default {
+  data() {
+    return {
+      isLoading: false
+    };
+  },
+  created() {
+    EventBus.$on(Event.LOADING, data => {
+      console.log("loading: ", data);
+      this.isLoading = data;
+      // this.isLoading = true;
+    });
+  }
+};
 </script>
 
 <style lang="scss" scoped >

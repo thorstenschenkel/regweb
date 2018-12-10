@@ -80,12 +80,14 @@ export default {
     Vue.http
       .get(url)
       .then(data => {
-        if (data && data.body && data.body.body) {
-          const respBody = JSON.parse(data.body.body);
-          console.log("respBody: ", respBody);
-          if (respBody.years) {
-            this.years = respBody.years;
-          }
+        console.log("data: ", data);
+        if (data && data.body && data.body.years) {
+          // const respBody = JSON.parse(data.body.body);
+          // console.log("respBody: ", respBody);
+          // if (respBody.years) {
+          //   this.years = respBody.years;
+          // }
+          this.years = data.body.years;
         }
       })
       .catch(error => {
@@ -112,6 +114,14 @@ export default {
         .get(url)
         .then(data => {
           console.log("data: ", data);
+          if (data && data.body && data.body.events) {
+            // const respBody = JSON.parse(data.body.body);
+            // console.log("respBody: ", respBody);
+            // if (respBody.years) {
+            //   this.years = respBody.years;
+            // }
+            this.events = data.body.events;
+          }
         })
         .catch(error => {
           console.error("Cannot load the events!", error);

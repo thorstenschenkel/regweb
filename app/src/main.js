@@ -9,14 +9,12 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 library.add(faSpinner)
 
 Vue.use(VueResource);
+//Vue.http.headers.common['Access-Control-Allow-Headers'] = 'Accept, Content-Type, Access-Control-Allow-Origin';
+//Vue.http.headers.common['access-control-allow-origin'] = '*';
+//Vue.http.headers.common['accept'] = 'application/json';
+//Vue.http.headers.common['content-type'] = 'application/json';
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
-
-
-Vue.http.headers.common['Content-Type'] = 'application/json'
-Vue.http.headers.common['Access-Control-Allow-Origin'] = '*'
-Vue.http.headers.common['Accept'] = 'application/json, text/plain, */*'
-Vue.http.headers.common['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, Authorization, Access-Control-Allow-Origin'
 
 new Vue({
   el: '#app',
