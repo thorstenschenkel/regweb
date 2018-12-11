@@ -70,7 +70,8 @@ export default {
       years: [],
       events: [{ id: 1, name: "abc" }, { id: 2, name: "xyz" }],
       selectedYear: null,
-      selectedEvent: null
+      selectedEvent: null,
+      event: null
     };
   },
   created() {
@@ -82,16 +83,14 @@ export default {
       .then(data => {
         console.log("data: ", data);
         if (data && data.body && data.body.years) {
-          // const respBody = JSON.parse(data.body.body);
-          // console.log("respBody: ", respBody);
-          // if (respBody.years) {
-          //   this.years = respBody.years;
-          // }
           this.years = data.body.years;
+        } else {
+          // TODO
         }
       })
       .catch(error => {
         console.error("Cannot load the years!", error);
+        // TODO
       })
       .finally(() => {
         EventBus.$emit(Event.LOADING, false);
@@ -100,10 +99,11 @@ export default {
   methods: {
     resetEvent() {
       this.selectedEvent = null;
+      this.event = null;
       this.fireEvent();
     },
     fireEvent() {
-      this.$emit("changeEvent", this.selectedEvent);
+      this.$emit("changeEvent", this.event);
     },
     onYearChanged() {
       EventBus.$emit(Event.LOADING, true);
@@ -115,23 +115,43 @@ export default {
         .then(data => {
           console.log("data: ", data);
           if (data && data.body && data.body.events) {
-            // const respBody = JSON.parse(data.body.body);
-            // console.log("respBody: ", respBody);
-            // if (respBody.years) {
-            //   this.years = respBody.years;
-            // }
             this.events = data.body.events;
+          } else {
+            // TODO
           }
         })
         .catch(error => {
           console.error("Cannot load the events!", error);
+          // TODO
         })
         .finally(() => {
           EventBus.$emit(Event.LOADING, false);
         });
     },
     onEventChanged() {
-      this.fireEvent();
+      EventBus.$emit(Event.LOADING, true);
+      this.event = null;
+      const url =
+        Constants.REGAPI_BASE_URL + "?eventId=" + this.selectedEvent._id;
+      // const url = "http://jsonplaceholder.typicode.com/posts";
+      Vue.http
+        .get(url)
+        .then(data => {
+          console.log("data: ", data);
+          if (data && data.body && data.body.event) {
+            this.event = data.body.event;
+          } else {
+            // TODO
+          }
+        })
+        .catch(error => {
+          console.error("Cannot load the events!", error);
+          // TODO
+        })
+        .finally(() => {
+          EventBus.$emit(Event.LOADING, false);
+          this.fireEvent();
+        });
     }
   }
 };
