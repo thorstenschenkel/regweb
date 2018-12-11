@@ -16,7 +16,7 @@
     <div class="row">
       <div class="col-lg-2 col-md-3 col-sm-4 col-12 form-group">
         <div class="row">
-          <label class="col-12" for="yearSelect">Year</label>
+          <label class="col-12" for="yearSelect">Jahr</label>
         </div>
         <div class="row">
           <div class="col-12">
@@ -26,7 +26,7 @@
               v-model="selectedYear"
               v-on:change="onYearChanged"
             >
-              <option disabled v-bind:value="null">Select a year</option>
+              <option disabled v-bind:value="null">Jahr auswählen</option>
               <option v-for="year in years" v-bind:key="year">{{ year }}</option>
             </select>
           </div>
@@ -34,7 +34,7 @@
       </div>
       <div class="col-lg-6 col-md-7 col-sm-8 col-12 form-group" v-if="selectedYear">
         <div class="row">
-          <label class="col-12" for="eventSelect">Event</label>
+          <label class="col-12" for="eventSelect">Veranstaltung</label>
         </div>
         <div class="row">
           <div class="col-12">
@@ -44,7 +44,7 @@
               v-model="selectedEvent"
               v-on:change="onEventChanged"
             >
-              <option disabled v-bind:value="null">Select an event</option>
+              <option disabled v-bind:value="null">Veranstaltung auswählen</option>
               <option
                 v-for="event in events"
                 v-bind:value="event"
