@@ -33,7 +33,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped >
+<style lang="scss" scoped>
 .spinner-container {
   z-index: 999;
   position: fixed;
