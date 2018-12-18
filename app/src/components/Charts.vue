@@ -10,7 +10,9 @@
               <br>zur Veranstaltung
             </span>
           </template>
-          <div>Tab Contents 1</div>
+          <div>
+            <GChart type="ColumnChart" v-bind:data="chart30Data" v-bind:options="chart30Options"/>
+          </div>
         </b-tab>
         <b-tab>
           <template slot="title">
@@ -37,7 +39,19 @@
 export default {
   data() {
     return {
-      activeTab: "chart30"
+      chart30Data: [
+        ["Year", "Sales", "Expenses", "Profit"],
+        ["2014", 1000, 400, 200],
+        ["2015", 1170, 460, 250],
+        ["2016", 660, 1120, 300],
+        ["2017", 1030, 540, 350]
+      ],
+      chart30Options: {
+        chart: {
+          title: "Company Performance",
+          subtitle: "Sales, Expenses, and Profit: 2014-2017"
+        }
+      }
     };
   },
   props: ["contest"],
