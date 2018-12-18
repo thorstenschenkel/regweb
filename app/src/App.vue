@@ -17,14 +17,14 @@
     <div class="container">
       <h1>{{ title }}</h1>
       <event-picker v-on:changeEvent="updateSelectedEvent($event)"></event-picker>
-      <charts v-bind:event="selectedEvent"></charts>
+      <charts-overview v-bind:event="selectedEvent"></charts-overview>
     </div>
   </div>
 </template>
 
 <script>
 import EventPicker from "./components/EventPicker.vue";
-import Charts from "./components/Charts.vue";
+import ChartsOverview from "./components/ChartsOverview.vue";
 import Spinner from "./components/Spinner.vue";
 
 export default {
@@ -36,7 +36,7 @@ export default {
   },
   components: {
     "event-picker": EventPicker,
-    charts: Charts,
+    "charts-overview": ChartsOverview,
     spinner: Spinner
   },
   methods: {
@@ -48,7 +48,6 @@ export default {
 </script>
 
 <style>
-@import "./../node_modules/bootstrap/dist/css/bootstrap.min.css";
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
