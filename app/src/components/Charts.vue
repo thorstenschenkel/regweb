@@ -1,5 +1,5 @@
 // vue
-// - props: contest
+// - props: event, contest
 <template>
   <div>
     <b-card no-body>
@@ -20,7 +20,9 @@
               <br>zur Veranstaltung
             </span>
           </template>
-          <div>Tab Contents 2</div>
+          <div>
+            <GChart type="ColumnChart" v-bind:data="chart60Data" v-bind:options="chart60Options"/>
+          </div>
         </b-tab>
         <b-tab>
           <template slot="title">
@@ -36,25 +38,50 @@
 </template>
 
 <script>
+function parseDate(input) {
+  var parts = input.match(/(\d+)/g);
+  return new Date(parts[2], parts[1] - 1, parts[0]);
+}
+
+function shortDateStrg(date) {
+  const day = date.getDay();
+  let strg = day > 10 ? day : "0" + day;
+  strg += ".";
+  const month = date.getMonth() + 1;
+  strg += month > 9 ? month : "0" + month;
+  strg += ".";
+  return strg;
+}
+
+function createChartArray(event, contest, count) {
+  let date = parseDate(event.dateStrg);
+  let chartArray = [];
+  for (let i = 0; i < count; i++) {
+    chartArray.unshift([shortDateStrg(date), 10 * i]);
+    date.setDate(date.getDate() - 1);
+  }
+  chartArray.unshift(["Datum", "Anzahl"]);
+  return chartArray;
+}
+
 export default {
   data() {
     return {
-      chart30Data: [
-        ["Year", "Sales", "Expenses", "Profit"],
-        ["2014", 1000, 400, 200],
-        ["2015", 1170, 460, 250],
-        ["2016", 660, 1120, 300],
-        ["2017", 1030, 540, 350]
-      ],
+      chart30Data: [],
       chart30Options: {
-        chart: {
-          title: "Company Performance",
-          subtitle: "Sales, Expenses, and Profit: 2014-2017"
-        }
+        chart: {}
+      },
+      chart60Data: [],
+      chart60Options: {
+        chart: {}
       }
     };
   },
-  props: ["contest"],
+  props: ["event", "contest"],
+  created() {
+    this.chart30Data = createChartArray(this.event, this.contest, 30);
+    this.chart60Data = createChartArray(this.event, this.contest, 60);
+  },
   methods: {}
 };
 </script>

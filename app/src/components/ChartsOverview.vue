@@ -46,7 +46,7 @@
           <h5>{{ contest.name }}</h5>
         </div>
         <div class="col-12">
-          <charts v-bind:contest="contest"></charts>
+          <charts v-bind:event="event" v-bind:contest="contest"></charts>
         </div>
       </div>
     </div>
