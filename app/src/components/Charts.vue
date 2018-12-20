@@ -38,6 +38,10 @@
 </template>
 
 <script>
+function datesEqual(d1, d2) {
+   retunr ( d1.getDay() === d2.getDay() && d1.getMonth() === d2.getMonth() && d1.getYear() === d2.getYear() );
+}
+
 function parseDate(input) {
   var parts = input.match(/(\d+)/g);
   return new Date(parts[2], parts[1] - 1, parts[0]);
@@ -53,11 +57,22 @@ function shortDateStrg(date) {
   return strg;
 }
 
-function createChartArray(event, contest, count) {
+function getCount(date, counts) {
+  const index = _.findIndex(counts, (o) => { return datesEqual(o.date, date); });
+  if ( index === -1 ) {
+    return 0;
+  } 
+  return counts[index].count;
+}
+
+function createChartArray(event, contest, barCount) {
+  const counts = contest.counts;
   let date = parseDate(event.dateStrg);
   let chartArray = [];
-  for (let i = 0; i < count; i++) {
-    chartArray.unshift([shortDateStrg(date), 10 * i]);
+  for (let i = 0; i < barCount; i++) {
+    const shortDate = shortDateStrg(date);
+    const count = getCount(date, counts);
+    chartArray.unshift([shortDate, count]);
     date.setDate(date.getDate() - 1);
   }
   chartArray.unshift(["Datum", "Anzahl"]);
