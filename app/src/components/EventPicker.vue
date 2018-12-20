@@ -68,7 +68,7 @@ export default {
   data() {
     return {
       years: [],
-      events: [{ id: 1, name: "abc" }, { id: 2, name: "xyz" }],
+      events: [],
       selectedYear: null,
       selectedEvent: null,
       event: null
@@ -76,8 +76,6 @@ export default {
   },
   created() {
     const url = Constants.REGAPI_BASE_URL;
-    // "https://aik0gtj01g.execute-api.eu-west-1.amazonaws.com/public/events";
-    // const url = "https://jsonplaceholder.typicode.com/todos/1";
     Vue.http
       .get(url)
       .then(data => {
@@ -109,7 +107,6 @@ export default {
       EventBus.$emit(Event.LOADING, true);
       this.resetEvent();
       const url = Constants.REGAPI_BASE_URL + "?year=" + this.selectedYear;
-      // const url = "http://jsonplaceholder.typicode.com/posts";
       Vue.http
         .get(url)
         .then(data => {
@@ -133,7 +130,6 @@ export default {
       this.event = null;
       const url =
         Constants.REGAPI_BASE_URL + "?eventId=" + this.selectedEvent._id;
-      // const url = "http://jsonplaceholder.typicode.com/posts";
       Vue.http
         .get(url)
         .then(data => {
