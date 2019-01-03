@@ -25,7 +25,7 @@ Vue.use(VueResource);
 //Vue.http.headers.common['accept'] = 'application/json';
 //Vue.http.headers.common['content-type'] = 'application/json';
 
-Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 new Vue({
   el: '#app',

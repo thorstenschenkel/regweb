@@ -16,7 +16,9 @@
           <template slot="title">
             <span>Tabelle</span>
           </template>
-          <div>Tab Contents 3</div>
+          <div class="t7-table-body">
+            <GChart type="Table" v-bind:data="chartTableData" v-bind:options="chartTableOptions"/>
+          </div>
         </b-tab>
       </b-tabs>
     </b-card>
@@ -24,34 +26,14 @@
 </template>
 
 <script>
+import { shortDateStrg, fullDateStrg } from "./../shared/date-tools";
+
 function datesEqual(d1, d2) {
   return (
     d1.getDate() === d2.getDate() &&
     d1.getMonth() === d2.getMonth() &&
     d1.getYear() === d2.getYear()
   );
-}
-
-function parseDate(input) {
-  var parts = input.match(/(\d+)/g);
-  return new Date(parts[2], parts[1] - 1, parts[0]);
-}
-
-function shortDateStrg(date) {
-  const day = date.getDate();
-  let strg = "";
-  if (day < 10) {
-    strg += "0";
-  }
-  strg += day;
-  strg += ".";
-  const month = date.getMonth() + 1;
-  if (month < 10) {
-    strg += "0";
-  }
-  strg += month;
-  strg += ".";
-  return strg;
 }
 
 function getCount(date, counts) {
@@ -67,7 +49,11 @@ function getCount(date, counts) {
 
 function createChartArray(event, contest, barCount) {
   const counts = contest.counts;
-  let date = parseDate(event.dateStrg);
+  let date = event.date;
+  const today = new Date();
+  if (date > today) {
+    date = today;
+  }
   let chartArray = [];
   let noCounts = true;
   for (let i = 0; i < barCount; i++) {
@@ -76,13 +62,31 @@ function createChartArray(event, contest, barCount) {
     chartArray.unshift([shortDate, count]);
     date.setDate(date.getDate() - 1);
     if (count > 0) {
-      noCounts = false;
+      noCounts = false; // ???
     }
   }
   chartArray.unshift(["Datum", "Anzahl"]);
   if (noCounts) {
     return;
   }
+  return chartArray;
+}
+
+function createTableArray(event, contest) {
+  const counts = contest.counts;
+  let date = event.date;
+  const today = new Date();
+  if (date > today) {
+    date = today;
+  }
+  let chartArray = [];
+  for (let i = 0; i < counts.length; i++) {
+    const fullDate = fullDateStrg(date);
+    const count = getCount(date, counts);
+    chartArray.push([fullDate, count]);
+    date.setDate(date.getDate() - 1);
+  }
+  chartArray.unshift(["Datum", "Anzahl"]);
   return chartArray;
 }
 
@@ -106,13 +110,27 @@ export default {
             color: "#871b47"
           }
         },
-        chart: {}
+        chart: {
+          legend: "none",
+          height: 250,
+          // TODO
+          title:
+            "Die letzten 30 Tage vor der Veranstaltung / Anmeldungen der letzten 30 Tage",
+          subtitle: "Anzahl der Meldungen: TODO"
+        }
+      },
+      chartTableData: [],
+      // https://developers.google.com/chart/interactive/docs/gallery/table
+      chartTableOptions: {
+        height: 250,
+        width: 250,
+        sort: "disable"
       }
     };
   },
   props: ["event", "contest"],
   created() {
-    const data = createChartArray(this.event, this.contest, 30);
+    let data = createChartArray(this.event, this.contest, 30);
     if (data) {
       this.chart30Data = data;
     } else {
@@ -124,10 +142,22 @@ export default {
     if (!data) {
       this.chart30Options.height = 75;
     }
+    data = createTableArray(this.event, this.contest);
+    this.chartTableData = data;
   },
   methods: {}
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.card-body {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 0;
+  padding-right: 0;
+}
+.t7-table-body {
+  padding-left: 20px;
+  padding-right: 20px;
+}
 </style>

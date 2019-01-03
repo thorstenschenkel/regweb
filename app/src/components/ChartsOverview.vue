@@ -4,6 +4,9 @@
 // - index
 // components
 // - one-chart
+// filter
+// - lokal
+// (global: Vue.filter('formatDate', function (value) { /* TODO */ });)
 
 <template>
   <div v-if="event">
@@ -14,7 +17,7 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <h4>{{ event.name }}</h4>
+        <h4>{{ event.name }} am {{ event.date | formatDate }}</h4>
       </div>
     </div>
     <div v-if="showContests()">
@@ -56,6 +59,7 @@
 <script>
 import Vue from "vue";
 import Charts from "./Charts.vue";
+import { fullDateStrg } from "./../shared/date-tools";
 
 export default {
   props: ["event"],
@@ -69,6 +73,11 @@ export default {
       } else {
         return false;
       }
+    }
+  },
+  filters: {
+    formatDate: function(value) {
+      return fullDateStrg(value);
     }
   }
 };

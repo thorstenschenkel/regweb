@@ -64,6 +64,11 @@ import { EventBus } from "./../shared/eventBus";
 import { Event } from "./../shared/eventEnum";
 import { Constants } from "./../shared/constants";
 
+function parseDate(input) {
+  var parts = input.match(/(\d+)/g);
+  return new Date(parts[2], parts[1] - 1, parts[0]);
+}
+
 export default {
   data() {
     return {
@@ -136,6 +141,7 @@ export default {
           console.log("data: ", data);
           if (data && data.body && data.body.event) {
             this.event = data.body.event;
+            this.event.date = parseDate(this.event.dateStrg);
           } else {
             // TODO
           }
