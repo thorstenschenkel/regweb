@@ -49,7 +49,7 @@
                 v-for="event in events"
                 v-bind:value="event"
                 v-bind:key="event.id"
-              >{{ event.name }}</option>
+              >{{ event.dateStrg }} - {{ event.name }}</option>
             </select>
           </div>
         </div>
@@ -63,6 +63,11 @@ import Vue from "vue";
 import { EventBus } from "./../shared/eventBus";
 import { Event } from "./../shared/eventEnum";
 import { Constants } from "./../shared/constants";
+import {
+  LOAD_YEAR_ERROR,
+  LOAD_EVENTS_ERROR,
+  LOAD_EVENT_ERROR
+} from "./../shared/errorMap";
 
 function parseDate(input) {
   var parts = input.match(/(\d+)/g);
@@ -93,7 +98,10 @@ export default {
       })
       .catch(error => {
         console.error("Cannot load the years!", error);
-        // TODO
+        EventBus.$emit(Event.ERROR, {
+          errorKey: LOAD_YEARS_ERROR,
+          httpError: error
+        });
       })
       .finally(() => {
         EventBus.$emit(Event.LOADING, false);
@@ -109,6 +117,7 @@ export default {
       this.$emit("changeEvent", this.event);
     },
     onYearChanged() {
+      EventBus.$emit(Event.ERROR);
       EventBus.$emit(Event.LOADING, true);
       this.resetEvent();
       const url = Constants.REGAPI_BASE_URL + "?year=" + this.selectedYear;
@@ -124,13 +133,17 @@ export default {
         })
         .catch(error => {
           console.error("Cannot load the events!", error);
-          // TODO
+          EventBus.$emit(Event.ERROR, {
+            errorKey: LOAD_EVENTS_ERROR,
+            httpError: error
+          });
         })
         .finally(() => {
           EventBus.$emit(Event.LOADING, false);
         });
     },
     onEventChanged() {
+      EventBus.$emit(Event.ERROR);
       EventBus.$emit(Event.LOADING, true);
       this.event = null;
       const url =
@@ -148,7 +161,10 @@ export default {
         })
         .catch(error => {
           console.error("Cannot load the events!", error);
-          // TODO
+          EventBus.$emit(Event.ERROR, {
+            errorKey: LOAD_EVENT_ERROR,
+            httpError: error
+          });
         })
         .finally(() => {
           EventBus.$emit(Event.LOADING, false);

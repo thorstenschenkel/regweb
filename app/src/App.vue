@@ -16,6 +16,7 @@
     </div>
     <div class="container">
       <h1>{{ title }}</h1>
+      <error-panel></error-panel>
       <event-picker v-on:changeEvent="updateSelectedEvent($event)"></event-picker>
       <charts-overview v-bind:event="selectedEvent"></charts-overview>
     </div>
@@ -26,6 +27,7 @@
 import EventPicker from "./components/EventPicker.vue";
 import ChartsOverview from "./components/ChartsOverview.vue";
 import Spinner from "./components/Spinner.vue";
+import ErrorPanel from "./components/ErrorPanel.vue";
 
 export default {
   data() {
@@ -37,6 +39,7 @@ export default {
   components: {
     "event-picker": EventPicker,
     "charts-overview": ChartsOverview,
+    "error-panel": ErrorPanel,
     spinner: Spinner
   },
   methods: {

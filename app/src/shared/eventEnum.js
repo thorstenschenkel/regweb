@@ -1,3 +1,4 @@
 export const Event = {
-    LOADING: 'loading'
+    LOADING: 'loading',
+    ERROR: 'error'
 }
