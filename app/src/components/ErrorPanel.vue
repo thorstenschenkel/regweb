@@ -10,6 +10,26 @@ import { EventBus } from "./../shared/eventBus";
 import { Event } from "./../shared/eventEnum";
 import { ErrorMap, UNEXPECTED_ERROR } from "./../shared/errorMap";
 
+function getHttpErrorText(httpError) {
+  let text = "";
+  if (httpError && httpError.ok === false) {
+    if (httpError.status || httpError.statusText) {
+      text += "<small>[";
+      if (httpError.status) {
+        text += "Status " + httpError.status;
+      }
+      if (httpError.status && httpError.statusText) {
+        text += ": ";
+      }
+      if (httpError.statusText) {
+        text += httpError.statusText;
+      }
+      text += "]</small>";
+    }
+  }
+  return text;
+}
+
 export default {
   data() {
     return {
@@ -18,14 +38,19 @@ export default {
   },
   created() {
     EventBus.$on(Event.ERROR, data => {
-      console.log("error: ", UNEXPECTED_ERROR);
       this.errorText = null;
       if (data && data.errorKey) {
         this.errorText = ErrorMap.get(data.errorKey);
-        if (!this.errorText) {
-          this.errorText = ErrorMap.get(UNEXPECTED_ERROR);
-        }
       }
+      if (!this.errorText) {
+        this.errorText = ErrorMap.get(UNEXPECTED_ERROR);
+      }
+      if (data && data.httpError) {
+        this.errorText += getHttpErrorText(data.httpError);
+      }
+    });
+    EventBus.$on(Event.NO_ERROR, data => {
+      this.errorText = null;
     });
   }
 };

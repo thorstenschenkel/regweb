@@ -64,9 +64,12 @@ import { EventBus } from "./../shared/eventBus";
 import { Event } from "./../shared/eventEnum";
 import { Constants } from "./../shared/constants";
 import {
-  LOAD_YEAR_ERROR,
+  LOAD_YEARS_ERROR,
   LOAD_EVENTS_ERROR,
-  LOAD_EVENT_ERROR
+  LOAD_EVENT_ERROR,
+  NO_YEARS_ERROR,
+  NO_EVENTS_ERROR,
+  NO_EVENT_ERROR
 } from "./../shared/errorMap";
 
 function parseDate(input) {
@@ -85,6 +88,7 @@ export default {
     };
   },
   created() {
+    EventBus.$emit(Event.NO_ERROR);
     const url = Constants.REGAPI_BASE_URL;
     Vue.http
       .get(url)
@@ -93,7 +97,9 @@ export default {
         if (data && data.body && data.body.years) {
           this.years = data.body.years;
         } else {
-          // TODO
+          EventBus.$emit(Event.ERROR, {
+            errorKey: NO_YEARS_ERROR
+          });
         }
       })
       .catch(error => {
@@ -117,7 +123,7 @@ export default {
       this.$emit("changeEvent", this.event);
     },
     onYearChanged() {
-      EventBus.$emit(Event.ERROR);
+      EventBus.$emit(Event.NO_ERROR);
       EventBus.$emit(Event.LOADING, true);
       this.resetEvent();
       const url = Constants.REGAPI_BASE_URL + "?year=" + this.selectedYear;
@@ -128,7 +134,9 @@ export default {
           if (data && data.body && data.body.events) {
             this.events = data.body.events;
           } else {
-            // TODO
+            EventBus.$emit(Event.ERROR, {
+              errorKey: NO_EVENTS_ERROR
+            });
           }
         })
         .catch(error => {
@@ -143,7 +151,7 @@ export default {
         });
     },
     onEventChanged() {
-      EventBus.$emit(Event.ERROR);
+      EventBus.$emit(Event.NO_ERROR);
       EventBus.$emit(Event.LOADING, true);
       this.event = null;
       const url =
@@ -156,7 +164,9 @@ export default {
             this.event = data.body.event;
             this.event.date = parseDate(this.event.dateStrg);
           } else {
-            // TODO
+            EventBus.$emit(Event.ERROR, {
+              errorKey: NO_EVENT_ERROR
+            });
           }
         })
         .catch(error => {
