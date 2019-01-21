@@ -154,6 +154,7 @@ export default {
       EventBus.$emit(Event.NO_ERROR);
       EventBus.$emit(Event.LOADING, true);
       this.event = null;
+      this.fireEvent();
       const url =
         Constants.REGAPI_BASE_URL + "?eventId=" + this.selectedEvent._id;
       Vue.http

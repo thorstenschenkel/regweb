@@ -49,7 +49,7 @@ function getCount(date, counts) {
 
 function createChartArray(event, contest, barCount) {
   const counts = contest.counts;
-  let date = event.date;
+  let date = new Date(event.date);
   const today = new Date();
   if (date > today) {
     date = today;
@@ -62,7 +62,7 @@ function createChartArray(event, contest, barCount) {
     chartArray.unshift([shortDate, count]);
     date.setDate(date.getDate() - 1);
     if (count > 0) {
-      noCounts = false; // ???
+      noCounts = false;
     }
   }
   chartArray.unshift(["Datum", "Anzahl"]);
@@ -74,7 +74,7 @@ function createChartArray(event, contest, barCount) {
 
 function createTableArray(event, contest) {
   const counts = contest.counts;
-  let date = event.date;
+  let date = new Date(event.date);
   const today = new Date();
   if (date > today) {
     date = today;
