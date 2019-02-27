@@ -8,6 +8,10 @@
 // - spinner / Spinner
 // - event-picker / EventPicker
 // - charts / Charts
+// 
+// TODO: Scroll To Top
+// TODO?: https://bootstrap-vue.js.org/docs/directives/scrollspy/
+
 
 <template>
   <div>

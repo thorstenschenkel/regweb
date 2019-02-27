@@ -41,7 +41,9 @@
         <div class="col-12">
           <h5>Gesamt</h5>
         </div>
-        <div class="col-12">Todo</div>
+        <div class="col-12">
+          <charts v-bind:event="event"></charts>
+        </div>
       </div>
       <div v-if="showContests()" v-for="(contest, index) in this.event.contests" class="row">
         <a v-bind:id="index"></a>

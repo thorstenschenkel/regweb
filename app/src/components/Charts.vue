@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import Vue from "vue";
 import { shortDateStrg, fullDateStrg } from "./../shared/date-tools";
 
 function datesEqual(d1, d2) {
@@ -47,8 +48,41 @@ function getCount(date, counts) {
   return counts[index].count;
 }
 
+function getCounts(event, contest) {
+  if (contest) {
+    return contest.counts;
+  } else {
+    if (event && Vue._.isArray(event.contests)) {
+      let counts;
+      for (let contest of event.contests) {
+        if (counts) {
+          for (let count of contest.counts) {
+            const ci = Vue._.findIndex(counts, c => {
+              return Vue._.isArray(c.date)
+                ? c.date.toDateString() === count.date.toDateString()
+                : false;
+            });
+            if (ci >= 0) {
+              counts[i].count += count.count;
+            } else {
+              counts.push(count);
+            }
+          }
+        } else {
+          counts = contest.counts;
+        }
+      }
+      if (!counts) {
+        counts = [];
+      }
+      return counts;
+    }
+  }
+  return [];
+}
+
 function createChartArray(event, contest, barCount) {
-  const counts = contest.counts;
+  const counts = getCounts(event, contest);
   let date = new Date(event.date);
   const today = new Date();
   if (date > today) {
@@ -73,7 +107,7 @@ function createChartArray(event, contest, barCount) {
 }
 
 function createTableArray(event, contest) {
-  const counts = contest.counts;
+  const counts = getCounts(event, contest);
   let date = new Date(event.date);
   const today = new Date();
   if (date > today) {
