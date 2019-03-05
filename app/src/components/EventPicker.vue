@@ -93,7 +93,7 @@ export default {
     Vue.http
       .get(url)
       .then(data => {
-        console.log("data: ", data);
+        // console.log("data: ", data);
         if (data && data.body && data.body.years) {
           this.years = data.body.years;
         } else {
@@ -160,7 +160,7 @@ export default {
       Vue.http
         .get(url)
         .then(data => {
-          console.log("data: ", data);
+          // console.log("data: ", data);
           if (data && data.body && data.body.event) {
             this.event = data.body.event;
             this.event.date = parseDate(this.event.dateStrg);

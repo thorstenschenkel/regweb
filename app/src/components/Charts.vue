@@ -58,18 +58,16 @@ function getCounts(event, contest) {
         if (counts) {
           for (let count of contest.counts) {
             const ci = Vue._.findIndex(counts, c => {
-              return Vue._.isArray(c.date)
-                ? c.date.toDateString() === count.date.toDateString()
-                : false;
+              return datesEqual(new Date(c.date), new Date(count.date));
             });
             if (ci >= 0) {
-              counts[i].count += count.count;
+              counts[ci].count += count.count;
             } else {
-              counts.push(count);
+              counts.push(Vue._.cloneDeep(count));
             }
           }
         } else {
-          counts = contest.counts;
+          counts = Vue._.cloneDeep(contest.counts);
         }
       }
       if (!counts) {
