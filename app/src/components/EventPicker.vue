@@ -32,28 +32,9 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-6 col-md-7 col-sm-8 col-12 form-group" v-if="selectedYear">
-        <div class="row">
-          <label class="col-12" for="eventSelect">Veranstaltung</label>
-        </div>
-        <div class="row">
-          <div class="col-12">
-            <select
-              class="form-control"
-              id="eventSelect"
-              v-model="selectedEvent"
-              v-on:change="onEventChanged"
-            >
-              <option disabled v-bind:value="null">Veranstaltung auswählen</option>
-              <option
-                v-for="event in events"
-                v-bind:value="event"
-                v-bind:key="event.id"
-              >{{ event.dateStrg }} - {{ event.name }}</option>
-            </select>
-          </div>
-        </div>
-      </div>
+    </div>
+    <div class="col-lg-6 col-md-7 col-sm-8 col-12" v-if="selectedYear">
+      <event-selector v-bind:events="events" v-bind:event="event"></event-selector>
     </div>
   </div>
 </template>
@@ -63,13 +44,12 @@ import Vue from "vue";
 import { EventBus } from "./../shared/eventBus";
 import { Event } from "./../shared/eventEnum";
 import { Constants } from "./../shared/constants";
+import { EventSelector } from "./EventSelector.vue";
 import {
   LOAD_YEARS_ERROR,
   LOAD_EVENTS_ERROR,
-  LOAD_EVENT_ERROR,
   NO_YEARS_ERROR,
-  NO_EVENTS_ERROR,
-  NO_EVENT_ERROR
+  NO_EVENTS_ERROR
 } from "./../shared/errorMap";
 
 function parseDate(input) {
@@ -86,6 +66,9 @@ export default {
       selectedEvent: null,
       event: null
     };
+  },
+  components: {
+    "event-selector": EventSelector
   },
   created() {
     EventBus.$emit(Event.NO_ERROR);
@@ -148,38 +131,6 @@ export default {
         })
         .finally(() => {
           EventBus.$emit(Event.LOADING, false);
-        });
-    },
-    onEventChanged() {
-      EventBus.$emit(Event.NO_ERROR);
-      EventBus.$emit(Event.LOADING, true);
-      this.event = null;
-      this.fireEvent();
-      const url =
-        Constants.REGAPI_BASE_URL + "?eventId=" + this.selectedEvent._id;
-      Vue.http
-        .get(url)
-        .then(data => {
-          // console.log("data: ", data);
-          if (data && data.body && data.body.event) {
-            this.event = data.body.event;
-            this.event.date = parseDate(this.event.dateStrg);
-          } else {
-            EventBus.$emit(Event.ERROR, {
-              errorKey: NO_EVENT_ERROR
-            });
-          }
-        })
-        .catch(error => {
-          console.error("Cannot load the events!", error);
-          EventBus.$emit(Event.ERROR, {
-            errorKey: LOAD_EVENT_ERROR,
-            httpError: error
-          });
-        })
-        .finally(() => {
-          EventBus.$emit(Event.LOADING, false);
-          this.fireEvent();
         });
     }
   }
