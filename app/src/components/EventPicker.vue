@@ -77,6 +77,30 @@ function parseDate(input) {
   return new Date(parts[2], parts[1] - 1, parts[0]);
 }
 
+function datesEqual(d1, d2) {
+  return (
+    d1.getDate() === d2.getDate() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getYear() === d2.getYear()
+  );
+}
+
+function removeDuplicateCounts(event) {
+  if (event && event.contests) {
+    for (let contest of event.contests) {
+      contest.counts = Vue._.uniqWith(contest.counts, (c1, c2) => {
+        if (c1.date === null && c2.date === null) {
+          return true;
+        } else if (c1.date === null || c2.date === null) {
+          return false;
+        } else {
+          return datesEqual(new Date(c1.date), new Date(c2.date));
+        }
+      });
+    }
+  }
+}
+
 export default {
   data() {
     return {
@@ -164,6 +188,7 @@ export default {
           if (data && data.body && data.body.event) {
             this.event = data.body.event;
             this.event.date = parseDate(this.event.dateStrg);
+            removeDuplicateCounts(this.event);
           } else {
             EventBus.$emit(Event.ERROR, {
               errorKey: NO_EVENT_ERROR
